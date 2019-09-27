@@ -1,0 +1,6 @@
+gitminder
+
+usage: gitminder <root-dir>
+
+Checks directories within <root-dir> for unstaged changes in Git repositories.
+Displays a summary of these changes.
