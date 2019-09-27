@@ -5,6 +5,15 @@
 # Find all Git repos within <root-dir> (.git)
 REPOS=($(find $@ -name ".git" -type d | xargs -I% readlink -f %/..))
 
+# Find all the worktrees related to the Git repos
+WTS=()
+for repo in ${REPOS[@]}; do
+  # append worktrees that aren't this repo to the worktrees array
+  WTS+=($(git -C "$repo" worktree list --porcelain | grep worktree \
+            | cut -d" " -f 2 | grep -vx "$repo"))
+done
+REPOS+=(${WTS[*]})
+
 # Find all unstaged files within each
 for repo in ${REPOS[@]}; do
   # count all the modified working tree state
