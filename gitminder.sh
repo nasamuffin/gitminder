@@ -19,7 +19,7 @@ for repo in ${REPOS[@]}; do
   # count all the modified working tree state
   SUMMARY=$(git -C "$repo" status --porcelain=v1)
   # count how many changes to tracked files (?? denotes untracked)
-  TRACK_COUNT=$(echo "$SUMMARY" | fgrep -cv "??")
+  TRACK_COUNT=$(echo "$SUMMARY" | egrep -v "^$" | fgrep -cv "??")
   # count how many changes to untracked files
   UNTRACK_COUNT=$(echo "$SUMMARY" | fgrep -c "??")
   # get the branch name
