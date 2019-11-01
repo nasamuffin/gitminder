@@ -2,8 +2,12 @@
 
 # usage: gitminder <root-dir...>
 
+EXCLUDE_REGEXP="(\/t\/|t\\d{4})"
+
 # Find all Git repos within <root-dir> (.git)
-REPOS=($(find $@ -name ".git" -type d | xargs -I% readlink -f %/..))
+REPOS=($(find $@ -name ".git" -type d |
+         egrep -v $EXCLUDE_REGEXP |
+         xargs -I% readlink -f %/..))
 
 # Find all the worktrees related to the Git repos
 WTS=()
