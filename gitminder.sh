@@ -2,7 +2,7 @@
 
 # usage: gitminder <root-dir...>
 
-EXCLUDE_REGEXP="(\/t\/|t\\d{4})"
+EXCLUDE_REGEXP="(\/t\/|t\\d{4}|\/build\/)"
 
 # Find all Git repos within <root-dir> (.git)
 REPOS=($(find $@ -name ".git" -type d |
