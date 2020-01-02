@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# usage: gitminder <root-dir...>
+# usage: gitminder <root-dir\n...>
 
 EXCLUDE_REGEXP="(\/t\/|t\\d{4}|\/build\/)"
 
-# Find all Git repos within <root-dir> (.git)
-REPOS=($(find $@ -name ".git" -type d |
-         egrep -v $EXCLUDE_REGEXP |
-         xargs -I% readlink -f %/..))
+# 'locate' is much faster than 'find', but doesn't let us just get dirs.
+DOTGIT=($(locate -b -e -r "^\.git$"))
+REPOS=
+for path in ${DOTGIT[@]}; do
+	[[ -d "$path" ]] || continue
+	REPOS+=($(echo "$path" |
+		  egrep "$(echo "$@" | tr ' ' '\n')" |
+		  egrep -v "$EXCLUDE_REGEXP" |
+		  xargs -I% readlink -f %/..))
+done
 
 # Find all the worktrees related to the Git repos
 WTS=()
